@@ -9,11 +9,57 @@ from urllib.request import urlparse
 from tqdm import tqdm
 import argparse
 import os
+import queue
+import threading
+from .model import MangaPage
+
+class BulkImageDownloader(threading.Thread):
+    def __init__(self, queue, destfolder,progressBar,image_url_parser):
+        super(BulkImageDownloader, self).__init__()
+        self.queue = queue
+        self.destfolder = destfolder
+        self.daemon = True
+        self.prepare_folder(destfolder)
+        self.progressBar = progressBar
+        self.image_url_parser = image_url_parser
+        
+    def run(self):
+        while True:
+            manga_page = self.queue.get()
+            try:
+                page_soup = self.get_soup(manga_page.url)
+                image_url = self.image_url_parser(page_soup)
+                self.download_img(image_url,manga_page.pageIndex)
+            except Exception as e:
+                print("   Error: %s"%e)
+            self.queue.task_done()
+
+    def download_img(self,url,page_number):
+        filename = str(page_number)+".jpg"
+        r = requests.get(url, stream=True)
+        if r.status_code == 200:
+            with open(self.destfolder+'/'+filename, 'wb') as f:
+                r.raw.decode_content = True
+                shutil.copyfileobj(r.raw, f)
+                self.progressBar.update(1)
+    
+    def prepare_folder(self,folder_path):
+        if not os.path.exists(folder_path):
+            os.makedirs(folder_path)
+    
+    def get_soup(self,url):
+        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        cj = CookieJar()
+        opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
+        rqst = opener.open(req)    
+        if rqst.getcode() == 200:
+            return BeautifulSoup(rqst, 'html5lib')
 
 
 class MangaSiteExtractor:
-    def  __init__(self,cwd):
+    def  __init__(self,cwd,number_of_thread=4):
         self.cwd = cwd
+        self.number_of_thread = number_of_thread
 
     def download_img(self,url,filename):
         r = requests.get(url, stream=True)
@@ -47,16 +93,22 @@ class MangaSiteExtractor:
         soup = self.get_soup(chapter_url)
         total_page = self.extract_total_page(soup)
         pbar = tqdm(total=total_page,desc=chapter_url)
+        image_url_list = []
+        download_queue = queue.Queue()
         if not folder:
             folder_name = self.extract_title(soup)
             self.cwd = self.cwd + '/'+folder_name
             self.prepare_folder(self.cwd)
+            
         for i in range(1,total_page+1):
             page_url = self.get_chapter_page(chapter_url,i)
-            page_soup = self.get_soup(page_url)
-            image_url = self.get_image_url(page_soup)
-            self.download_img(image_url,page_count+i)
-            pbar.update(1)
+            download_queue.put(MangaPage(page_url,page_count+i))
+        
+        for i in range(self.number_of_thread):
+            t = BulkImageDownloader(download_queue,self.cwd,pbar,self.get_image_url)
+            t.start()
+
+        download_queue.join()
         pbar.close()
         return page_count+total_page
 
