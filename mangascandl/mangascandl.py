@@ -8,7 +8,7 @@ from urllib.request import urlparse
 from tqdm import tqdm
 import argparse
 import os
-from extractor.Mangareader import Mangareader
+from .extractor.Mangareader import Mangareader
 
 cwd = os.getcwd()
 

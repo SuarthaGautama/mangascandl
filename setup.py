@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup,find_packages
 
 requirements = [
     'tqdm',
@@ -7,15 +7,15 @@ requirements = [
 ]
 
 setup(
-   name='mangadl',
+   name='mangascandl',
    version='1.0',
    description='Tool for downloading mangascan from websites',
    author='Suartha Gautama',
    author_email='suartha.gautama@gmail.com',
-   packages=['mangadl'], 
+   packages=find_packages(),
    entry_points = {
        'console_scripts':[
-           'mangadl = mangadl.__main__:main'
+           'mangascandl = mangascandl.mangascandl:main'
        ]
    } ,
    install_requires=requirements, 
