@@ -80,13 +80,23 @@ class MangaSiteExtractor:
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
     
-    def download_batch(self,title_url,start,end,folder_name):
-        self.cwd=self.cwd+'/'+folder_name
+    def download_batch(self,title_url,start,end,folder_name=None):
+        if folder_name:
+            self.cwd=self.cwd+'/'+folder_name
+        if not title_url.endswith('/'):
+            title_url = title_url+'/'
         page_number = 0
         self.prepare_folder(self.cwd)
         for i in range(int(start),int(end)+1):
             chapter_url = title_url+str(i)
-            page_number = self.download_chapter(chapter_url,page_number,folder = self.cwd)
+            if folder_name:
+                page_number = self.download_chapter(chapter_url,page_number,folder = self.cwd)
+            else:
+                soup = self.get_soup(chapter_url)
+                folder_name = self.extract_title(soup)
+                print(folder_name)
+                print(chapter_url)
+                page_number = self.download_chapter(chapter_url)
         print('download finished')
 
     def download_chapter(self,chapter_url,page_count = 0,folder = None):

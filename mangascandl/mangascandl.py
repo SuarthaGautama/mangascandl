@@ -25,7 +25,7 @@ def main():
     download_batch_parser.add_argument("title_url")
     download_batch_parser.add_argument("starting_chapter")
     download_batch_parser.add_argument("end_chapter")
-    download_batch_parser.add_argument("destination_folder")
+    download_batch_parser.add_argument("destination_folder",nargs='?')
 
     opts = arger.parse_args()
 

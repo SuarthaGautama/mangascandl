@@ -5,7 +5,7 @@ class Mangareader(MangaSiteExtractor):
 
    def extract_title(self,soup):
        chapter_title = soup.find('title').text
-       chapter_title = chapter_title.split('-')[0]
+       chapter_title = chapter_title.split('- Read')[0]
        return chapter_title
 
    def extract_total_page(self,soup):
