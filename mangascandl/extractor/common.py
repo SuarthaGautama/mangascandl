@@ -13,6 +13,24 @@ import queue
 import threading
 from .model import MangaPage
 
+
+class Error(Exception):
+    """Base class for exceptions in this module."""
+    pass
+
+class MangaUrlError(Error):
+    """Exception raised for errors in the input.
+
+    Attributes:
+        expr -- input expression in which the error occurred
+        msg  -- explanation of the error
+    """
+    default_msg = 'Manga not found in url, Please check the url'
+    def __init__(self, expr, msg = default_msg):
+        self.expr = expr
+        self.msg = msg
+
+
 class BulkImageDownloader(threading.Thread):
     def __init__(self, queue, destfolder,progressBar,image_url_parser):
         super(BulkImageDownloader, self).__init__()
@@ -75,7 +93,7 @@ class MangaSiteExtractor:
         rqst = opener.open(req)    
         if rqst.getcode() == 200:
             return BeautifulSoup(rqst, 'html5lib')
-    
+        
     def prepare_folder(self,folder_path):
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
@@ -87,17 +105,18 @@ class MangaSiteExtractor:
             title_url = title_url+'/'
         page_number = 0
         self.prepare_folder(self.cwd)
-        for i in range(int(start),int(end)+1):
-            chapter_url = title_url+str(i)
-            if folder_name:
-                page_number = self.download_chapter(chapter_url,page_number,folder = self.cwd)
-            else:
-                soup = self.get_soup(chapter_url)
-                folder_name = self.extract_title(soup)
-                print(folder_name)
-                print(chapter_url)
-                page_number = self.download_chapter(chapter_url)
-        print('download finished')
+        try:
+            for i in range(int(start),int(end)+1):
+                chapter_url = title_url+str(i)
+                if folder_name:
+                    page_number = self.download_chapter(chapter_url,page_number,folder = self.cwd)
+                else:
+                    soup = self.get_soup(chapter_url)
+                    folder_name = self.extract_title(soup)
+                    page_number = self.download_chapter(chapter_url)
+            print('download finished')
+        except MangaUrlError as e:
+            print(e.msg)
 
     def download_chapter(self,chapter_url,page_count = 0,folder = None):
         soup = self.get_soup(chapter_url)
