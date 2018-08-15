@@ -5,11 +5,12 @@ from http.cookiejar import CookieJar
 import requests
 import urllib
 from urllib.request import urlparse
+from urllib.parse import urlparse
 from tqdm import tqdm
 import argparse
 import os
 from .extractor.Mangareader import Mangareader
-
+from .extractor.Mangadex import Mangadex
 cwd = os.getcwd()
 
 def main():
@@ -27,14 +28,26 @@ def main():
     download_batch_parser.add_argument("end_chapter")
     download_batch_parser.add_argument("destination_folder",nargs='?')
 
+    
     opts = arger.parse_args()
 
     if opts.command == 'download':
         if opts.destination_folder:
             cwd = opts.destination_folder
+        extractor = getExtractor(opts.chapter_url)
         extractor.download_chapter(opts.chapter_url,0)
     elif opts.command == 'batch':
+        extractor = getExtractor(opts.title_url)
         extractor.download_batch(opts.title_url,opts.starting_chapter,opts.end_chapter,opts.destination_folder)
-
+        
+def getExtractor(url):
+    url_pattern = ['']
+    o = urlparse(url)
+    if o.netloc == 'mangadex.org':
+        extractor = Mangadex(cwd)
+    elif o.netloc.endswith('mangareader.net'):
+        extractor = Mangareader(cwd)
+    return extractor
+    
 if __name__ == '__main__':
     main()
