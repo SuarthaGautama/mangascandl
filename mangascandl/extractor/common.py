@@ -107,7 +107,7 @@ class MangaSiteExtractor:
         self.prepare_folder(self.cwd)
         chapter_url_list = self.get_chapter_url_to_download(title_url,start,end)
         try:
-            for i in range(int(start),int(end)+1):
+            for i in range(len(chapter_url_list)):
                 chapter_url = chapter_url_list[i-int(start)]
                 if folder_name:
                     page_number = self.download_chapter(chapter_url,page_number,folder = self.cwd)
