@@ -38,7 +38,7 @@ Download multiple chapter:
 $ mangascandl batch [manga_page_link] [start_chapter] [end_chapter] [<optional> folder name]
 ```
 
-##Example
+## Example
 Download mangascan by chapter:
 
 ```shell
