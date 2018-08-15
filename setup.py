@@ -2,8 +2,7 @@ from setuptools import setup,find_packages
 
 requirements = [
     'tqdm',
-    'beautifulsoup4',
-    'html5lib'
+    'beautifulsoup4'
 ]
 
 setup(
