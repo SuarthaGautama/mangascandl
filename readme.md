@@ -1,8 +1,8 @@
 mangascandl is a Command Line Interface (CLI) utility for downloading manga by chapter from Online manga scan reader. Currently only support mangareader.net.
 
 
-##Requirements
-- Python 3.x
+## Requirements
+* Python 3.x
 
 
 ## Installing mscandl
@@ -14,14 +14,14 @@ $sudo pip install mangascandl
 ```
 
 
-##Supported Sites
+## Supported Sites
 
 
 * [Mangareader](https://www.mangareader.net)
 * [Mangadex](https://mangadex.org)
 
 
-##mangascandl CLI Usage
+## mangascandl CLI Usage
 
 To download mangascan chapter run this command:
 
