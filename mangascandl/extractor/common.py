@@ -117,15 +117,3 @@ class MangaSiteExtractor:
             print('download finished')
         except MangaUrlError as e:
             print(e.msg)
-
-    def extract_title(self,soup):
-        raise NotImplementedError("Please Implement this method")    
-
-    def extract_total_page(self,soup):
-        raise NotImplementedError("Please Implement this method")
-
-    def get_chapter_page(self,chapter_url,page):
-        raise NotImplementedError("Please Implement this method")
-
-    def get_image_url(self,soup):
-        raise NotImplementedError("Please Implement this method")

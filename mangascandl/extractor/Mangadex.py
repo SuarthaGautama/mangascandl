@@ -10,8 +10,8 @@ from tqdm import tqdm
 from collections import OrderedDict
 class Mangadex(MangaSiteExtractor):
     '''crawler for https://mangadex.org'''
-    mangadex_api_url_base = 'https://mangadex.org/api/'
     mangadex_url = 'https://mangadex.org/'
+    mangadex_api_url_base = mangadex_url + 'api/'
     chapter_url = mangadex_api_url_base+'chapter/'
     manga_url = mangadex_api_url_base+'manga/'
     manga_info = None
