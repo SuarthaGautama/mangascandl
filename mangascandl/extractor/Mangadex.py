@@ -25,11 +25,11 @@ class Mangadex(MangaSiteExtractor):
         url_object = urlparse(chapter_url)
         paths = url_object.path.split('/')
         download_queue = queue.Queue()
-        
+        save_path = self.cwd
         if paths[1] == 'chapter':
             chapter_code = paths[2]
         else:
-            raise MangaUrlError('manga page list is not found')
+            raise MangaUrlError('[ERROR] Manga page list is not found')
         
         chapter_info = self.get_chapter_info(chapter_code)
         image_arr = chapter_info['page_array']
@@ -40,9 +40,9 @@ class Mangadex(MangaSiteExtractor):
             folder_name = manga_info['manga']['title']+' '+chapter_info['chapter']
             save_path = self.cwd + '/'+folder_name
             self.prepare_folder(save_path)
-        for i in range(1,total_page+1):
+        for page_index in range(1,total_page+1):
             page_url = self.url_join(self.mangadex_url,chapter_info['server'],chapter_info['hash']+'/',image_arr[i-1])
-            download_queue.put(MangaPage(page_url,page_count+i))
+            download_queue.put(MangaPage(page_url,page_count+page_index))
         for i in range(self.number_of_thread):
             t = BulkImageDownloader(download_queue,save_path,pbar,self.get_image_url)
             t.start()

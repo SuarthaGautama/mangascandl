@@ -28,7 +28,7 @@ class Mangareader(MangaSiteExtractor):
 
     def get_chapter_page(self,chapter_url,page):
         return chapter_url+"/"+str(page)
-
+    
     def get_image_url(self,url):
         soup = Utility.get_soup(url)
         image_div = soup.find('div',{"id": "imgholder"})
@@ -47,9 +47,10 @@ class Mangareader(MangaSiteExtractor):
         pbar = tqdm(total=total_page,desc=chapter_url)
         image_url_list = []
         download_queue = queue.Queue()
+        save_path = self.cwd
         if not folder:
             folder_name = self.extract_title(soup)
-            save_path = self.cwd + '/'+folder_name
+            save_path = save_path + '/'+folder_name
             self.prepare_folder(save_path)
             
         for i in range(1,total_page+1):
