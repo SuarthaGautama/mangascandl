@@ -8,7 +8,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 setup(
    name='mangascandl',
-   version='1.0.2',
+   version='1.0.3',
    description='Tool for downloading mangascan from websites',
    author='Suartha Gautama',
    author_email='suartha.gautama@gmail.com',
