@@ -41,7 +41,7 @@ class Mangadex(MangaSiteExtractor):
             save_path = self.cwd + '/'+folder_name
             self.prepare_folder(save_path)
         for page_index in range(1,total_page+1):
-            page_url = self.url_join(self.mangadex_url,chapter_info['server'],chapter_info['hash']+'/',image_arr[i-1])
+            page_url = self.url_join(self.mangadex_url,chapter_info['server'],chapter_info['hash']+'/',image_arr[page_index-1])
             download_queue.put(MangaPage(page_url,page_count+page_index))
         for i in range(self.number_of_thread):
             t = BulkImageDownloader(download_queue,save_path,pbar,self.get_image_url)
