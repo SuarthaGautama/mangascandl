@@ -2,7 +2,8 @@ from setuptools import setup,find_packages
 
 requirements = [
     'tqdm',
-    'beautifulsoup4'
+    'beautifulsoup4',
+    'requests'
 ]
 with open("README.md", "r") as fh:
     long_description = fh.read()
