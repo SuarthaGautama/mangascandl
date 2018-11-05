@@ -1,9 +1,12 @@
 language: python
-python: 
-  - "3.6" 
-
+python:
+- '3.6'
 before_install:
-  - pip install --upgrade pip setuptools wheel
-
-script: 
-  - python setup.py bdist_wheel
+- pip install --upgrade pip setuptools wheel
+script:
+- python setup.py bdist_wheel
+deploy:
+  provider: pypi
+  user: suartha
+  password:
+    secure: L9L2/vRkx37o3T33LFnVKDEXDLOCvllDJrVMcxU81u1vC01m9HFEaDEROllDuEZZ0E+BI8qBhtBU6D0yrRu5Rx1NHiJZl93+x3BoRgdIuIsR+H3JeVGlSbnu+pZJeYTvkpsDOVnAuwrkzzUhRQ5WT7MqRcLmjxEXw8Ienpz5I9D1MIXduKMILHlNGuBil9l9KFLO/OVW7NKHsJx0sieavkO1iauCnPWRqRHUH93u7Oo56xCp8asNIjPmHF6mqanHbqsPvmJnGxEPnJiJjsLFLCiynTcELAgZStQzyqEAD2VgspvyqOvwMi+wfvQvZ0Rx0/HxofEmK9PMoInoizNvv1ZsUeEeS6kDLJioWHm5MdMsQOgrMClBy0BhK8WtvhKhMg73L+9lY1ukHjgkcDk2T+k3vMg+tRyT+9zRxRwILp8UknYnvAJZUPAfw0USSXX98Ndog2O6pUPwVBrdwkLBihTp9Ch7lxmtkQ2AxTu85QXGDZNvEK1b9JqluzjBUgxiamH9Nf35BQFegSz+rNbKIQyO1DhNrQDbYqKRKZdDvwqusjmYV1WdsK6LSr2SqCoEiYz/X4B+5ImA1MXuAAeoegEGaUaVwyRrcxD7k+aNd1+D60BoLHl2Ns4qah8eXEeHnR1+8jLGaFKEQObyEMgLyWKMHBzTf6JlPDGizdP7yRY=
