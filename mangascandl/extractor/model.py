@@ -1,4 +1,4 @@
 class MangaPage(object):
-    def __init__(self,url,pageIndex):
+    def __init__(self, url, page_index):
         self.url = url
-        self.pageIndex = pageIndex
+        self.pageIndex = page_index
